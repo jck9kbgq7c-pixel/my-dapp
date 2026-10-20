@@ -135,9 +135,11 @@ export default function App() {
       counts[cat] = (counts[cat] || 0) + 1;
     });
 
-    const activeSet = new Set([
+    const activeSet = new Set<string>([
       ...DEFAULT_CATEGORIES,
-      ...notes.map((n) => n.category?.trim()).filter(Boolean),
+      ...notes
+        .map((n) => n.category?.trim())
+        .filter((c): c is string => Boolean(c)),
     ]);
 
     return {
@@ -155,7 +157,7 @@ export default function App() {
         !query ||
         note.title.toLowerCase().includes(query) ||
         note.body.toLowerCase().includes(query) ||
-        note.category.toLowerCase().includes(query);
+        (note.category ?? "").toLowerCase().includes(query);
 
       const matchesCategory =
         selectedCategory === "All" ||
